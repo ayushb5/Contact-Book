@@ -1,3 +1,23 @@
+let contacts = JSON.parse(localStorage.getItem("contacts")) || [];
+
+function toggleButton() {
+  const btn = document.getElementById("addContactBtn");
+  const contactCard = document.getElementById("contactCard");
+
+  if (contacts.length >= 1) {
+    btn.classList.add("d-none");
+    contactCard.classList.remove("d-none");
+  } else {
+    btn.classList.remove("d-none");
+    contactCard.classList.add("d-none");
+  }
+}
+
+window.addEventListener("DOMContentLoaded", () => {
+  toggleButton();
+  renderCarousel();
+});
+
 const fields = {
   imgUrl: document.getElementById("imgUrl"),
   contactName: document.getElementById("contactName"),
@@ -15,52 +35,43 @@ const errors = {
 };
 
 function validate() {
-  let isValid = true;
-  // Image URL error
-  if (fields.imgUrl.value.trim() === "") {
-    errors.imgError.innerText = "Image URL is required.";
-    isValid = false;
-  } else {
-    errors.imgError.innerText = "";
-  }
-
-  //   Contact Name error
-  if (fields.contactName.value.trim() === "") {
-    errors.nameError.innerText = "Name is required.";
-    isValid = false;
-  } else {
-    errors.nameError.innerText = "";
-  }
-
-  //   Number error
-  if (fields.phn_no.value.trim() === "") {
-    errors.numberError.innerText = "Phone Number is required.";
-    isValid = false;
-  } else {
-    errors.numberError.innerText = "";
-  }
-
-  //   Address error
-  if (fields.address.value.trim() === "") {
-    errors.addressError.innerText = "Address is required.";
-    isValid = false;
-  } else {
-    errors.addressError.innerText = "";
-  }
-
-  //   Profession error
-  if (fields.profession.value.trim() === "") {
-    errors.professionError.innerText = "Profession is required.";
-    isValid = false;
-  } else {
-    errors.professionError.innerText = "";
-  }
-
-  return isValid;
+  return (
+    validateImgUrl() &&
+    validateName() &&
+    validatePhnNo() &&
+    validateAddress() &&
+    validateProfession()
+  );
 }
 
 // saveContact
-function saveContact() {}
+function saveContact() {
+  if (!validate()) {
+    return;
+  }
+
+  const contact = {
+    imgUrl: fields.imgUrl.value.trim(),
+    name: fields.contactName.value.trim(),
+    phone: fields.phn_no.value.trim(),
+    address: fields.address.value.trim(),
+    profession: fields.profession.value.trim(),
+  };
+  contacts.push(contact);
+  localStorage.setItem("contacts", JSON.stringify(contacts));
+
+  currentIndex = contacts.length - 1;
+  renderCarousel();
+  carousel.to(currentIndex);
+  toggleButton();
+  handleReset();
+
+  const modal = bootstrap.Modal.getInstance(
+    document.getElementById("addContact"),
+  );
+
+  modal.hide();
+}
 
 // handleReset
 function handleReset() {
@@ -69,58 +80,149 @@ function handleReset() {
   fields.phn_no.value = "";
   fields.address.value = "";
   fields.profession.value = "";
+
+  errors.imgError.innerText = "";
+  errors.nameError.innerText = "";
+  errors.numberError.innerText = "";
+  errors.addressError.innerText = "";
+  errors.professionError.innerText = "";
 }
 
+// show Contact
+let currentIndex = 0;
+function renderCarousel() {
+  const carousel = document.getElementById("carouselInner");
+  carousel.innerHTML = "";
+
+  contacts.forEach((contact, index) => {
+    const item = document.createElement("div");
+    item.className = "carousel-item " + (index === 0 ? "active" : "");
+
+    item.innerHTML = `
+      <div class="card shadow main-card">
+        <div class="card-body">
+
+          <div class="d-flex align-items-center mb-3 gap-3">
+            <img src="${contact.imgUrl}" class="img-fluid" id="profileImg"/>
+
+            <div>
+              <h5 class="mb-0">${contact.name}</h5>
+              <small class="text-muted">${contact.profession}</small>
+            </div>
+          </div>
+
+          <p class="mb-1">
+            <i class="bi bi-telephone"></i> ${contact.phone}
+          </p>
+
+          <p class="text-muted">
+            <i class="bi bi-geo-alt"></i> ${contact.address}
+          </p>
+
+          <div class="d-flex gap-2">
+            <button class="btn btn-success w-100">
+              <i class="bi bi-telephone"></i> Call
+            </button>
+
+            <button class="btn btn-dark w-100">
+              <i class="bi bi-chat-dots"></i> Message
+            </button>
+          </div>
+
+        </div>
+      </div>
+    `;
+
+    carousel.appendChild(item);
+  });
+}
+
+// carousel prev,next
+const carousel = new bootstrap.Carousel(
+  document.querySelector("#contactCarousel"),
+  {
+    wrap: true,
+  },
+);
+document.getElementById("prev").onclick = () => carousel.prev();
+document.getElementById("next").onclick = () => carousel.next();
 // Event listeners for validation
-fields.imgUrl.addEventListener("input", () => {
-  if (fields.imgUrl.value.trim() === "") {
+fields.imgUrl.addEventListener("input", validateImgUrl);
+fields.contactName.addEventListener("input", validateName);
+fields.phn_no.addEventListener("input", validatePhnNo);
+fields.address.addEventListener("input", validateAddress);
+fields.profession.addEventListener("input", validateProfession);
+
+// Validation Functions
+function validateImgUrl() {
+  const value = fields.imgUrl.value;
+  if (value.trim() === "") {
     errors.imgError.innerText = "Image URL is required.";
-  } else if (!fields.imgUrl.value.match(/^(https?:\/\/[^\s]+)$/i)) {
+    return false;
+  } else if (!value.match(/^(https?:\/\/[^\s]+)$/i)) {
     errors.imgError.innerText = "Enter a valid URL.";
+    return false;
   } else {
     errors.imgError.innerText = "";
+    return true;
   }
-});
+}
 
-fields.contactName.addEventListener("input", () => {
-  if (fields.contactName.value.trim() === "") {
+function validateName() {
+  const value = fields.contactName.value;
+  if (value.trim() === "") {
     errors.nameError.innerText = "Name is required.";
-  } else if (!fields.contactName.value.match(/^[A-Za-z]+ [A-Za-z]+$/)) {
+    return false;
+  } else if (!value.match(/^[A-Za-z]+ [A-Za-z]+$/)) {
     errors.nameError.innerText = "Enter a valid Name (e.g. John Doe).";
+    return false;
   } else {
     errors.nameError.innerText = "";
+    return true;
   }
-});
+}
 
-fields.phn_no.addEventListener("input", () => {
-  if (fields.phn_no.value.trim() === "") {
+function validatePhnNo() {
+  const value = fields.phn_no.value;
+  if (value.trim() === "") {
     errors.numberError.innerText = "Phone Number is required.";
-  } else if (!fields.phn_no.value.match(/^[6-9]\d{9}$/)) {
+    return false;
+  } else if (!value.match(/^[6-9]\d{9}$/)) {
     errors.numberError.innerText =
       "Enter a valid Indian Phone Number (e.g. 9878765678).";
+    return false;
   } else {
     errors.numberError.innerText = "";
+    return true;
   }
-});
+}
 
-fields.address.addEventListener("input", () => {
-  if (fields.address.value.trim() === "") {
+function validateAddress() {
+  const value = fields.address.value;
+  if (value.trim() === "") {
     errors.addressError.innerText = "Address is required.";
-  } else if (fields.address.value.length < 10) {
+    return false;
+  } else if (value.trim().length < 3) {
     errors.addressError.innerText =
-      "Enter a valid Address (More than 10 characters).";
+      "Enter a valid Address (More than 3 characters (only for city)).";
+    return false;
   } else {
     errors.addressError.innerText = "";
+    return true;
   }
-});
+}
 
-fields.profession.addEventListener("input", () => {
-  if (fields.profession.value.trim() === "") {
+function validateProfession() {
+  const value = fields.profession.value;
+  if (value.trim() === "") {
     errors.professionError.innerText = "Profession is required.";
-  } else if (fields.profession.value.length < 3) {
+    return false;
+  } else if (value.trim().length < 3) {
     errors.professionError.innerText =
       "Enter a valid Profession (More than 3 Characters).";
+    return false;
   } else {
     errors.professionError.innerText = "";
+    return true;
   }
-});
+}
