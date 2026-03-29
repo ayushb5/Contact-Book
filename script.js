@@ -88,7 +88,7 @@ function handleReset() {
   errors.professionError.innerText = "";
 }
 
-// show Contact
+// show Contact(render)
 let currentIndex = 0;
 function renderCarousel() {
   const carousel = document.getElementById("carouselInner");
@@ -120,13 +120,13 @@ function renderCarousel() {
           </p>
 
           <div class="d-flex gap-2">
-            <button class="btn btn-success w-100">
+            <a href="tel:${contact.phone}" class="btn btn-success w-100">
               <i class="bi bi-telephone"></i> Call
-            </button>
+            </a>
 
-            <button class="btn btn-dark w-100">
-              <i class="bi bi-chat-dots"></i> Message
-            </button>
+            <a href="https://wa.me/91${contact.phone}" target="_blank" class="btn btn-dark w-100">
+              <i class="bi bi-chat-dots"></i> WhatsApp
+            </a>
           </div>
 
         </div>
@@ -146,6 +146,7 @@ const carousel = new bootstrap.Carousel(
 );
 document.getElementById("prev").onclick = () => carousel.prev();
 document.getElementById("next").onclick = () => carousel.next();
+
 // Event listeners for validation
 fields.imgUrl.addEventListener("input", validateImgUrl);
 fields.contactName.addEventListener("input", validateName);
