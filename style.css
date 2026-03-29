@@ -1,6 +1,52 @@
 /* contactCard */
 
-.contactCard {
+.card {
     height: 250px;
     width: 400px;
+    border: 1px solid rgb(169, 168, 160);
+}
+
+.carousel-item {
+    transition: transform 0.7s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+#contactCarousel {
+    overflow: hidden;
+    width: 400px;
+}
+
+.carousel-inner {
+    width: 100%;
+}
+
+.arrow-btn {
+    font-size: 28px;
+    cursor: pointer;
+    color: #2c2c2c;
+    display: flex;
+    align-items: center;
+}
+
+.arrow-btn:hover {
+    color: #4caf90;
+    transform: scale(1.1);
+    transition: 0.2s;
+}
+
+.plus-btn {
+    cursor: pointer;
+    color: rgb(0, 0, 0);
+}
+
+.plus-btn:hover {
+    color: blue;
+    transform: scale(1.1);
+    transition: 0.2s;
+}
+
+#profileImg {
+    height: 80px;
+    width: 80px;
+    border-radius: 50%;
+    object-fit: cover;
 }
