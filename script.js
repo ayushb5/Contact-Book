@@ -156,8 +156,8 @@ fields.profession.addEventListener("input", validateProfession);
 
 // Validation Functions
 function validateImgUrl() {
-  const value = fields.imgUrl.value;
-  if (value.trim() === "") {
+  const value = fields.imgUrl.value.trim();
+  if (value === "") {
     errors.imgError.innerText = "Image URL is required.";
     return false;
   } else if (!value.match(/^(https?:\/\/[^\s]+)$/i)) {
@@ -170,11 +170,11 @@ function validateImgUrl() {
 }
 
 function validateName() {
-  const value = fields.contactName.value;
-  if (value.trim() === "") {
+  const value = fields.contactName.value.trim();
+  if (value === "") {
     errors.nameError.innerText = "Name is required.";
     return false;
-  } else if (!value.match(/^[A-Za-z]+ [A-Za-z]+$/)) {
+  } else if (!value.match(/^[A-Za-z ]{3,}$/)) {
     errors.nameError.innerText = "Enter a valid Name (e.g. John Doe).";
     return false;
   } else {
@@ -184,8 +184,8 @@ function validateName() {
 }
 
 function validatePhnNo() {
-  const value = fields.phn_no.value;
-  if (value.trim() === "") {
+  const value = fields.phn_no.value.trim();
+  if (value === "") {
     errors.numberError.innerText = "Phone Number is required.";
     return false;
   } else if (!value.match(/^[6-9]\d{9}$/)) {
@@ -199,13 +199,12 @@ function validatePhnNo() {
 }
 
 function validateAddress() {
-  const value = fields.address.value;
-  if (value.trim() === "") {
+  const value = fields.address.value.trim();
+  if (value === "") {
     errors.addressError.innerText = "Address is required.";
     return false;
-  } else if (value.trim().length < 3) {
-    errors.addressError.innerText =
-      "Enter a valid Address (More than 3 characters (only for city)).";
+  } else if (value.length < 3) {
+    errors.addressError.innerText = "Enter a valid address (min 3 characters).";
     return false;
   } else {
     errors.addressError.innerText = "";
@@ -214,11 +213,11 @@ function validateAddress() {
 }
 
 function validateProfession() {
-  const value = fields.profession.value;
-  if (value.trim() === "") {
+  const value = fields.profession.value.trim();
+  if (value === "") {
     errors.professionError.innerText = "Profession is required.";
     return false;
-  } else if (value.trim().length < 3) {
+  } else if (value.length < 3) {
     errors.professionError.innerText =
       "Enter a valid Profession (More than 3 Characters).";
     return false;
