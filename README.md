@@ -18,10 +18,10 @@ Built using HTML, CSS, Bootstrap 5, and JavaScript.
 
 🚀 Live Demo:
 
-https://github.com/user-attachments/assets/f41ef12c-1a2a-4b4d-a321-da14e3082173
+https://github.com/user-attachments/assets/1893917e-9f78-4445-b28e-a9727b36ed45
 
 Preview Screenshots:
 
-<img width="1891" height="904" alt="Image" src="https://github.com/user-attachments/assets/77dd3932-06a3-482a-ab2a-ce850d4ad342" />
+<img width="1919" height="870" alt="Image" src="https://github.com/user-attachments/assets/084985b7-ef98-49c0-827f-f1bf3424ecfd" />
 
-<img width="1902" height="908" alt="Image" src="https://github.com/user-attachments/assets/0a7cab14-784e-4f15-a735-c27c519b7ad3" />
+<img width="1919" height="870" alt="Image" src="https://github.com/user-attachments/assets/ae89e26e-a3ae-4f76-92ba-e3719bbed3ff" />
